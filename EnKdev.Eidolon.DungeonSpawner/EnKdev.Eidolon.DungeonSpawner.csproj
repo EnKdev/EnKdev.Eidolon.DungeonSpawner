@@ -8,10 +8,13 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <None Update="data\data.json">
+        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      </None>
       <None Update="data\dataOld.json">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
-      <None Update="data\data.json">
+      <None Update="data\dataOld.json.bak">
         <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
       </None>
     </ItemGroup>

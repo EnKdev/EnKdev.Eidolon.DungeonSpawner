@@ -1,51 +1,51 @@
-﻿{
+{
   "regions": [
     {
       "region": "Galar",
       "grade": "D",
-      "dungeons": 39,
+      "dungeons": 36,
       "spawnChance": 17.14,
-      "baseModifier": 2.50
+      "baseModifier": 2.5
     },
     {
       "region": "Kalos",
       "grade": "C",
-      "dungeons": 55,
+      "dungeons": 56,
       "spawnChance": 18.83,
       "baseModifier": 4.25
     },
     {
       "region": "Unova",
-      "grade": "A+",
-      "dungeons": 158,
+      "grade": "A",
+      "dungeons": 128,
       "spawnChance": 25.37,
-      "baseModifier": 10.00
+      "baseModifier": 10.0
     },
     {
       "region": "Paldea",
       "grade": "SS",
-      "dungeons": 475,
+      "dungeons": 542,
       "spawnChance": 44.34,
       "baseModifier": 17.75
     },
     {
       "region": "Hoenn",
       "grade": "B",
-      "dungeons": 84,
+      "dungeons": 80,
       "spawnChance": 16.73,
-      "baseModifer": 5.20
+      "baseModifier": 5.2
     },
     {
       "region": "Johto",
       "grade": "S",
-      "dungeons": 177,
+      "dungeons": 206,
       "spawnChance": 26.38,
       "baseModifier": 7.75
     },
     {
       "region": "Kanto",
-      "grade": "A+",
-      "dungeons": 151,
+      "grade": "A",
+      "dungeons": 140,
       "spawnChance": 26.19,
       "baseModifier": 7.25
     },
@@ -59,11 +59,11 @@
     {
       "region": "Sinnoh",
       "grade": "S++",
-      "dungeons": 337,
+      "dungeons": 283,
       "spawnChance": 37.18,
       "baseModifier": 8.35
     }
   ],
-  "totalDungeons": 1520,
+  "totalDungeons": 1515,
   "worldGrade": "S"
 }

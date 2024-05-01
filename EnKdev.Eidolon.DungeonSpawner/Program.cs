@@ -10,10 +10,16 @@ public class Program
     private const string FilePathOldData = "./data/dataOld.json";
     private const string FilePathNewData = "./data/data.json";
     
+    static Random rand = new Random(); 
+    static int totalDungeons = 0;
+    
     private static void Main(string[] args)
     {
-        var regionList = ReadOldDataFile(FilePathOldData).Item1.ToList();
-        var worldGrade = ReadOldDataFile(FilePathOldData).Item2;
+        var oldData = ReadOldDataFile(FilePathOldData);
+
+        var regionList = oldData.Item1.ToList();
+        var worldGrade = oldData.Item2;
+        totalDungeons = oldData.Item3;
 
         if (regionList[0].Region == "No regions found.")
         {
@@ -22,9 +28,6 @@ public class Program
             Environment.Exit(-1);
         }
         
-        var rand = new Random();
-        var totalDungeons = 0;
-
         foreach (var region in regionList)
         {
             Console.WriteLine($"Region: {region.Region}");
@@ -32,21 +35,15 @@ public class Program
             Console.WriteLine($"Grade: {region.Grade}");
             Console.WriteLine($"Spawn Chance: {region.SpawnChance}");
             Console.WriteLine();
-            
-            if (!(rand.NextDouble(1.00, 100.00) < region.SpawnChance))
-            {
-                Console.WriteLine("Spawn check failed!");
-                Console.WriteLine();
-                
-                totalDungeons += region.Dungeons;
-                continue;
-            }
 
-            Console.WriteLine("Spawn check succeeded.");
-            
-            var newDungeons = Convert.ToInt32(region.Dungeons / 100.00 * region.BaseModifier);
-            region.Dungeons += newDungeons;
-            totalDungeons += region.Dungeons;
+            if (rand.Next(0, 101) <= 50)
+            {
+                RemoveDungeonsFromRegion(region);
+            }
+            else
+            {
+                AddDungeonsToRegion(region);
+            }
             
             region.Grade = DetermineGrade(region.Dungeons);
 
@@ -77,14 +74,14 @@ public class Program
         Environment.Exit(1);
     }
 
-    private static (IEnumerable<RegionModel>, string) ReadOldDataFile(string filePath)
+    private static (IEnumerable<RegionModel>, string, int) ReadOldDataFile(string filePath)
     {
         var fileContent = File.ReadAllText(filePath);
         var json = JsonConvert.DeserializeObject<DataModel>(fileContent);
 
         if (json is null)
         {
-            return new ValueTuple<IEnumerable<RegionModel>, string>
+            return new ValueTuple<IEnumerable<RegionModel>, string, int>
             {
                 Item1 = new List<RegionModel>
                 {
@@ -93,13 +90,16 @@ public class Program
                         Region = "No regions found."
                     }
                 },
-                Item2 = "-"
+                Item2 = "-",
+                Item3 = 0
             };
         }
 
         var list = json.Regions.ToList();
         var grade = json.WorldGrade;
-        return (list, grade);
+        var t = json.TotalDungeons;
+        
+        return (list, grade, t);
     }
 
     private static string DetermineGrade(int dungeons)
@@ -134,5 +134,36 @@ public class Program
             >= 500 and <= 749 => "C",
             _ => "D"
         };
+    }
+
+    private static void AddDungeonsToRegion(RegionModel region)
+    {
+        if (!(rand.NextDouble(1.00, 100.00) < region.SpawnChance))
+        {
+            Console.WriteLine("Spawn check failed!");
+            Console.WriteLine();
+            return;
+        }
+
+        Console.WriteLine("Spawn check succeeded.");
+            
+        var newDungeons = Convert.ToInt32(region.Dungeons / 100.00 * region.BaseModifier);
+        region.Dungeons += newDungeons;
+        totalDungeons += newDungeons;
+    }
+
+    private static void RemoveDungeonsFromRegion(RegionModel region)
+    {
+        if (region.Dungeons <= 15)
+        {
+            Console.WriteLine("Threshold hit, skipping this region...");
+            return;
+        }
+        
+        var lostDungeons = Convert.ToInt32(region.Dungeons / 100.00 * region.BaseModifier);
+        region.Dungeons -= lostDungeons;
+        totalDungeons -= lostDungeons;
+
+        Console.WriteLine("Removed dungeons!");
     }
 }
